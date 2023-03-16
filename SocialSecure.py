@@ -68,7 +68,7 @@ def main():
     print(banner)
     menu = """
 1)  Check Password Security Status
-2)  Secure Your Password Make Customer Encryption algorithm to your password    
+2)  Secure Your Password Make Custom Encryption algorithm to your password    
 3) exit
     """
     print(menu)
