@@ -1,4 +1,6 @@
 import string
+import random
+import requests
 banner = """
 
    _____            _       _  _____                          
@@ -62,14 +64,61 @@ Encryption technique:
 
 }
 """
-    return example
 
+    return example
+def avast(email):
+    print("[*] Checking Avast API")
+    url = 'https://bodyguard.avast.com/v1/web/email/one-time-check'
+    payload = {'email': email}
+
+    headers = {
+        'authority': 'bodyguard.avast.com',
+        'accept': 'application/json, text/plain, */*',
+        'accept-encoding': 'gzip, deflate, br',
+        'accept-language': 'en-US,en;q=0.9',
+        'content-length': '46',
+        'content-type': 'application/json;charset=UTF-8',
+        'origin': 'https://www.avast.com',
+        'referer': 'https://www.avast.com/',
+        'sec-ch-ua': '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-site',
+        'user-agent': ''
+    }
+
+    user_agents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
+    ]
+    headers['user-agent'] = random.choice(user_agents)
+
+    response = requests.post(url, headers=headers, json=payload)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        if data['value']['leaks_found']:
+            print("[-] Leaks found in Avast API! ")
+            print("""
+            What should you Do 
+                  change your email password
+            
+            """)
+        else:
+            print("[+] Good No leaks found.")
+    else:
+        print("Error:", response.status_code)
 def main():
     print(banner)
     menu = """
 1)  Check Password Security Status
-2)  Secure Your Password Make Custom Encryption algorithm to your password    
-3) exit
+2)  Secure Your Password Make Customer Encryption algorithm to your password 
+3)  check if you have been pwned
+99) exit
     """
     print(menu)
     choose = int(input("Option:"))
@@ -108,7 +157,11 @@ def main():
                        f"2. Enter the decrypted password to access your file.\n")
         print(f"Encryption configuration written to '{filename}'.")
         main()
-    elif  choose == 3:
+    elif choose == 3:
+        email = input("Enter your email:")
+        avast(email)
+        main()
+    elif  choose == 99:
         print("Bye :)")
         exit(0)
     else:
